@@ -18,9 +18,9 @@
     <actions>
         <action id="com.github.jinwatanabe.intellijpluginsandbox.ConceptChecker"
                 class="com.github.jinwatanabe.intellijpluginsandbox.ConceptChecker"
-                text="Hello World"
-                description="Copy path from project root"
-                icon="AllIcons.Actions.Copy"
+                text="Search Concept"
+                description="Search Concept Step"
+                icon="AllIcons.Actions.Checked"
         >
             <keyboard-shortcut keymap="$default" first-keystroke="control alt C"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
