@@ -1,9 +1,9 @@
-package com.github.jinwatanabe.gaugecpcheck.services
+package com.github.jinwatanabe.kitsune.services
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
-import com.github.jinwatanabe.gaugecpcheck.MyBundle
+import com.github.jinwatanabe.kitsune.MyBundle
 
 @Service(Service.Level.PROJECT)
 class MyProjectService(project: Project) {

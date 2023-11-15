@@ -1,6 +1,6 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.jinwatanabe.gaugecpcheck</id>
+    <id>com.github.jinwatanabe.kitsune</id>
     <name>gauge-cp-check Template</name>
     <vendor>jinwatanabe</vendor>
 
@@ -9,11 +9,11 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.jinwatanabe.gaugecpcheck.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <toolWindow factoryClass="com.github.jinwatanabe.kitsune.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.jinwatanabe.gaugecpcheck.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+        <listener class="com.github.jinwatanabe.kitsune.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
     <actions>
         <action id="com.github.jinwatanabe.intellijpluginsandbox.ConceptChecker"

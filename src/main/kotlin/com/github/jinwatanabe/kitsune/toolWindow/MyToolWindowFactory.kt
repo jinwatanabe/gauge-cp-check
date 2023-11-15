@@ -1,4 +1,4 @@
-package com.github.jinwatanabe.gaugecpcheck.toolWindow
+package com.github.jinwatanabe.kitsune.toolWindow
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
@@ -8,8 +8,8 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import com.github.jinwatanabe.gaugecpcheck.MyBundle
-import com.github.jinwatanabe.gaugecpcheck.services.MyProjectService
+import com.github.jinwatanabe.kitsune.MyBundle
+import com.github.jinwatanabe.kitsune.services.MyProjectService
 import javax.swing.JButton
 
 

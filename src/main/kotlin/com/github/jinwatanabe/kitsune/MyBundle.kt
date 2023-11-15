@@ -1,4 +1,4 @@
-package com.github.jinwatanabe.gaugecpcheck
+package com.github.jinwatanabe.kitsune
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls
