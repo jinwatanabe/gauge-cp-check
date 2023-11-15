@@ -10,11 +10,13 @@ import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.LocalFileSystem
 import java.nio.charset.StandardCharsets
 import com.intellij.openapi.editor.markup.HighlighterLayer
-import com.intellij.openapi.editor.markup.TextAttributes
 import com.intellij.openapi.util.TextRange
-import com.intellij.openapi.editor.markup.HighlighterTargetArea
 import com.intellij.openapi.ui.Messages
-import java.awt.Color
+import com.intellij.openapi.editor.markup.GutterIconRenderer
+import javax.swing.Icon
+import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.util.IconLoader
+
 
 
 class ConceptChecker : AnAction() {
@@ -71,24 +73,61 @@ class ConceptChecker : AnAction() {
         return specSteps.filter { it in concepts }
     }
 
-    private fun showResults(project: Project, usedSteps: List<String>) { // project を引数として追加
+    private fun showResults(project: Project, usedSteps: List<String>) {
         val editor = FileEditorManager.getInstance(project).selectedTextEditor ?: return
         val document = editor.document
         val markupModel = editor.markupModel
 
-        val highlightAttributes = TextAttributes()
-        highlightAttributes.backgroundColor = Color.GRAY
+        // アイコンのロード
+        val icon = IconLoader.getIcon("/logo.svg", this::class.java)
 
         for (step in usedSteps) {
             val lineNumber = findLineForStep(document, step)
-            Messages.showMessageDialog(lineNumber.toString(), "Information", Messages.getInformationIcon());
             if (lineNumber != -1) {
-                val startOffset = document.getLineStartOffset(lineNumber)
-                val endOffset = document.getLineEndOffset(lineNumber)
-                markupModel.addRangeHighlighter(startOffset, endOffset, HighlighterLayer.SELECTION, highlightAttributes, HighlighterTargetArea.LINES_IN_RANGE)
+                addGutterIcon(editor, lineNumber, icon)
             }
         }
     }
+
+    private fun addGutterIcon(editor: Editor, lineNumber: Int, icon: Icon) {
+        val markupModel = editor.markupModel
+        val document = editor.document
+
+        // 既存のアイコンを確認
+        val existingGutterIcon = markupModel.allHighlighters
+            .firstOrNull { it.gutterIconRenderer?.tooltipText == "Line: $lineNumber is concept step" }
+
+        // 既にアイコンがあれば追加しない
+        if (existingGutterIcon != null) {
+            return
+        }
+
+        val gutterIconRenderer = object : GutterIconRenderer() {
+            override fun getIcon(): Icon = icon
+
+            override fun getClickAction(): AnAction? {
+                // アイコンがクリックされた時の動作
+                return object : AnAction() {
+                    override fun actionPerformed(e: AnActionEvent) {
+                        // クリック時の動作を記述
+                        Messages.showMessageDialog("concept step at line $lineNumber", "Information", Messages.getInformationIcon())
+                    }
+                }
+            }
+
+            // equals と hashCode の実装
+            override fun equals(other: Any?): Boolean = other is GutterIconRenderer && other.icon == this.icon
+
+            override fun hashCode(): Int = icon.hashCode()
+
+            override fun getTooltipText(): String? = "Line: $lineNumber is concept step"
+        }
+
+
+        markupModel.addLineHighlighter(lineNumber, HighlighterLayer.ERROR + 1, null).gutterIconRenderer = gutterIconRenderer
+    }
+
+
     private fun findLineForStep(document: Document, step: String): Int {
         for (i in 0 until document.lineCount) {
             val lineStartOffset = document.getLineStartOffset(i)
