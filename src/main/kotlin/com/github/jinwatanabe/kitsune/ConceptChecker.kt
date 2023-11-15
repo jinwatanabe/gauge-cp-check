@@ -2,13 +2,20 @@ package com.github.jinwatanabe.intellijpluginsandbox
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.editor.Document
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VfsUtil
-import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.LocalFileSystem
 import java.nio.charset.StandardCharsets
+import com.intellij.openapi.editor.markup.HighlighterLayer
+import com.intellij.openapi.editor.markup.TextAttributes
+import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.editor.markup.HighlighterTargetArea
+import com.intellij.openapi.ui.Messages
+import java.awt.Color
+
 
 class ConceptChecker : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
@@ -21,11 +28,12 @@ class ConceptChecker : AnAction() {
             val cptFiles = findAllCptFiles(project)
             val concepts = extractConceptsFromCptFiles(cptFiles)
             val usedSteps = findMatchingSteps(specSteps, concepts)
-//
+
             if (usedSteps.isNotEmpty()) {
-                showResults(usedSteps)
+                showResults(project, usedSteps)
             }
         }
+
     }
 
     private fun findAllCptFiles(project: Project): List<VirtualFile> {
@@ -63,7 +71,33 @@ class ConceptChecker : AnAction() {
         return specSteps.filter { it in concepts }
     }
 
-    private fun showResults(usedSteps: List<String>) {
-        Messages.showInfoMessage(usedSteps.joinToString("\n"), "Matching Steps Found")
+    private fun showResults(project: Project, usedSteps: List<String>) { // project を引数として追加
+        val editor = FileEditorManager.getInstance(project).selectedTextEditor ?: return
+        val document = editor.document
+        val markupModel = editor.markupModel
+
+        val highlightAttributes = TextAttributes()
+        highlightAttributes.backgroundColor = Color.GRAY
+
+        for (step in usedSteps) {
+            val lineNumber = findLineForStep(document, step)
+            Messages.showMessageDialog(lineNumber.toString(), "Information", Messages.getInformationIcon());
+            if (lineNumber != -1) {
+                val startOffset = document.getLineStartOffset(lineNumber)
+                val endOffset = document.getLineEndOffset(lineNumber)
+                markupModel.addRangeHighlighter(startOffset, endOffset, HighlighterLayer.SELECTION, highlightAttributes, HighlighterTargetArea.LINES_IN_RANGE)
+            }
+        }
+    }
+    private fun findLineForStep(document: Document, step: String): Int {
+        for (i in 0 until document.lineCount) {
+            val lineStartOffset = document.getLineStartOffset(i)
+            val lineEndOffset = document.getLineEndOffset(i)
+            val lineText = document.getText(TextRange(lineStartOffset, lineEndOffset))
+            if (lineText.trim() == "* $step") {
+                return i
+            }
+        }
+        return -1
     }
 }
