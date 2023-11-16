@@ -6,12 +6,13 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
+# Usage
+
 <!-- Plugin description -->
 
-![Peek 2023-11-16 12-25](https://github.com/jinwatanabe/kitsune/assets/46788746/a1e0087f-1d53-45bc-a62f-fa44b0413825)
+Displays rows that use the concept in Steps of the Gauge Right-click and click Search Concept to mark the rows that use the concept.
 
-Displays rows that use the concept in Steps of the Gauge
-Right-click and click Search Concept to mark the rows that use the concept.
+![Peek 2023-11-16 12-25](https://github.com/jinwatanabe/kitsune/assets/46788746/a1e0087f-1d53-45bc-a62f-fa44b0413825)
 
 <!-- Plugin description end -->
 
